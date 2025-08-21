@@ -2,19 +2,13 @@
 //
 
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include "GameEngine.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
 
-    sf::RenderWindow window(sf::VideoMode({ 1600,900 }), "Wiggle", sf::Style::Default);
-    while (window.isOpen()) 
-    {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Escape)) {
-            window.close();
-        }
-    }
+    GameEngine().Run();
 
     return 0;
 }

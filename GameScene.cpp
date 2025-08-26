@@ -1,10 +1,11 @@
 #include "GameScene.h"
-
 #include <iostream>
 
 GameScene::GameScene() 
 {
 	//setup input handler
+	//setup map
+	m_map.PrintMap(m_map.GetTerritoryBoundaries()); //ensure the map was generated correctly
 	//spawn gameobjects & components
 }
 

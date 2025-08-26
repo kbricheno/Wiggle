@@ -1,9 +1,11 @@
 #pragma once
 #include "Scene.h"
+#include "Map.h";
 
 class GameScene : public Scene {
 private:
 	//InputHandler m_inputHandler;
+	Map m_map;
 	
 	//std::map<int, GameObject> m_gameObjects;
 	//std::map<int, VisualComponent> m_visualComponents;

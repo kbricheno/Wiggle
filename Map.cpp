@@ -19,10 +19,10 @@ Map::Map(int const in_textureTileSize, int const in_numFogTextures, int const in
 	}
 
 	//Find the tile in the center of the grid
-	m_centerTile = { (int)std::ceil(m_tileGrid.at(0).size() / 2.f), (int)std::ceil(m_tileGrid.size() / 2.f)};
+	m_centerTile = { (int)std::floor((m_tileGrid.at(0).size() - 1) / 2.f), (int)std::floor((m_tileGrid.size() - 1) / 2.f)};
 
-	//Identify the starting territory tiles in the grid
-	sf::Vector2i centerTileOffset = { (int)std::floor(m_centerTile.x - (m_centerSize.x / 2.f)), (int)std::floor(m_centerTile.y - (m_centerSize.y / 2.f)) };
+	//Offset the center tile by the size of the starting territory, then mark the starting territory tiles in the grid
+	sf::Vector2i centerTileOffset = { m_centerTile.x - (int)std::ceil((m_centerSize.x - 1) / 2.f), m_centerTile.y - (int)std::ceil((m_centerSize.y - 1) / 2.f) };
 	for (int width = 0; width < m_centerSize.x; width++)
 	{
 		for (int height = 0; height < m_centerSize.y; height++)
@@ -31,7 +31,7 @@ Map::Map(int const in_textureTileSize, int const in_numFogTextures, int const in
 		}
 	}
 
-	PrepareTileMap(in_textureTileSize, in_numFogTextures, in_numGrassTextures, in_numMarkedGrassTextures);
+	PrepareTileTextures(in_textureTileSize, in_numFogTextures, in_numGrassTextures, in_numMarkedGrassTextures);
 	GenerateMapVertexArray(/*in_textureTileSize*/ 50);
 	UpdateTerritory();
 }
@@ -117,21 +117,17 @@ void Map::UpdateTerritory()
 
 			case 1: //Grass tile
 				//Grass tiles with any fog tile neighbors become marker tiles
-				std::cout << "checking grass tile " << currentTile.x << ", " << currentTile.y << ":\n";
-
 				for (int i = 0; i < neighborTiles.size(); i++)
 				{
-					std::cout << "neighbor " << i << ": " << neighborTiles.at(i) << "\n";
 					if (neighborTiles.at(i) == 0) 
 					{
 						//New marker tile found, update it and its texture
-						std::cout << "marker identified, breaking\n";
 						m_tileGrid.at(currentTile.y).at(currentTile.x) = 2;
 						SetTileTexCoords(currentTile);
 						break;
 					}
 				}
-				//Grass tiles that are not connected to the nest by other grass tiles become fog tiles
+				//TODO: Grass tiles that are not connected to the nest by other grass tiles become fog tiles
 				break;
 
 			case 2: //Marker tile
@@ -154,7 +150,7 @@ void Map::UpdateTerritory()
 }
 
 //Slice the map texture up into tiles and store their coordinates for the VertexArray to use
-void Map::PrepareTileMap(int const in_textureTileSize, int const in_numFogTextures, int const in_numGrassTextures, int const in_numMarkedGrassTextures) 
+void Map::PrepareTileTextures(int const in_textureTileSize, int const in_numFogTextures, int const in_numGrassTextures, int const in_numMarkedGrassTextures) 
 {
 	int totalTextures = in_numFogTextures + in_numGrassTextures + in_numMarkedGrassTextures;
 	for (int i = 0; i < totalTextures; i++)
@@ -169,7 +165,7 @@ void Map::PrepareTileMap(int const in_textureTileSize, int const in_numFogTextur
 				sf::Vector2f(in_textureTileSize + (i * in_textureTileSize), in_textureTileSize)
 			});
 		}
-		else if (i < in_numGrassTextures) 
+		else if (i <= in_numGrassTextures) 
 		{
 			m_grassTextureQuads.push_back(
 			{
@@ -201,7 +197,6 @@ void Map::GenerateMapVertexArray(int const in_textureTileSize)
 	//Set up the VertexArray
 	m_mapVertices.setPrimitiveType(sf::PrimitiveType::Triangles);
 	m_mapVertices.resize(mapWidth * mapHeight * 6);
-	std::cout << "height: " << mapHeight << ", width: " << mapWidth << ", num tiles: " << mapHeight * mapWidth << "\n";
 
 	//Loop the map grid
 	for (int currentY = 0; currentY < mapHeight; ++currentY)

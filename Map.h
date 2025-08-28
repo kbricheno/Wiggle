@@ -5,7 +5,7 @@
 
 class Map {
 private:
-	std::array<std::array<int, 20>, 20> m_tileGrid;
+	std::array<std::array<int, 20>, 12> m_tileGrid;
 	sf::Vector2i const m_centerSize = { 3, 3 };
 	sf::Vector2i m_centerTile;
 

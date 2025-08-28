@@ -33,7 +33,7 @@ Map::Map(int const in_textureTileSize, int const in_numFogTextures, int const in
 
 	PrepareTileMap(in_textureTileSize, in_numFogTextures, in_numGrassTextures, in_numMarkedGrassTextures);
 	GenerateMapVertexArray(/*in_textureTileSize*/ 50);
-	//UpdateTerritory();
+	UpdateTerritory();
 }
 
 void Map::NotifyNewMarker(sf::Vector2i in_tile) 
@@ -71,7 +71,7 @@ void Map::UpdateTerritory()
 	if (m_tileGrid.size() > m_tileGrid.at(0).size()) loopSize = m_tileGrid.size() * m_tileGrid.size();
 	else loopSize = m_tileGrid.at(0).size() * m_tileGrid.at(0).size();
 
-	for (int i = 0; i < loopSize; i++)
+	for (int loopPos = 0; loopPos < loopSize; loopPos++)
 	{
 		//Add the direction vector to the current tile's position, increment the position of the current section
 		currentTile += direction;
@@ -88,64 +88,68 @@ void Map::UpdateTerritory()
 			if (direction.y == 0) sectionLength++;
 		}
 
-		////Check that the current tile exists (current coordinates might be outside the bounds of a rectangle)
-		//if (currentTile.y < m_tileGrid.size() && currentTile.x < m_tileGrid.at(0).size()) 
-		//{
-		//	int tile = m_tileGrid.at(currentTile.y).at(currentTile.x);
+		//Check that the current tile exists (current coordinates might be outside the bounds of a rectangle)
+		if (currentTile.y < m_tileGrid.size() && currentTile.x < m_tileGrid.at(0).size()) 
+		{
+			int tile = m_tileGrid.at(currentTile.y).at(currentTile.x);
 
-		//	//Obtain the tile's neighbors, also checking that those tiles exist (current tile might be at the very edge of the map)
-		//	std::vector<int> neighborTiles;
-		//	if (currentTile.y + 1 < m_tileGrid.size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y + 1).at(currentTile.x));
-		//	if (currentTile.y - 1 < m_tileGrid.size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y - 1).at(currentTile.x));
-		//	if (currentTile.x + 1 < m_tileGrid.at(0).size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y).at(currentTile.x + 1));
-		//	if (currentTile.x - 1 < m_tileGrid.at(0).size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y).at(currentTile.x - 1));
+			//Obtain the tile's neighbors, also checking that those tiles exist (current tile might be at the very edge of the map)
+			std::vector<int> neighborTiles;
+			if (currentTile.y + 1 < m_tileGrid.size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y + 1).at(currentTile.x));
+			if (currentTile.y - 1 < m_tileGrid.size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y - 1).at(currentTile.x));
+			if (currentTile.x + 1 < m_tileGrid.at(0).size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y).at(currentTile.x + 1));
+			if (currentTile.x - 1 < m_tileGrid.at(0).size()) neighborTiles.push_back(m_tileGrid.at(currentTile.y).at(currentTile.x - 1));
 
-		//	//Perform checks on the tile's surroundings to ensure it's of the correct type
-		//	switch (tile)
-		//	{
-		//	case 0: //Fog tile
-		//		//Fog tiles are always fog unless completely encapsulated by territory, in which case they become grass tiles
-		//		if (neighborTiles.size() != 4) break; //It's impossible for edge of map tiles to be completely encapsulated by territory
-		//		if (neighborTiles.at(0) != 0 && neighborTiles.at(1) != 0 && neighborTiles.at(2) != 0 && neighborTiles.at(3) != 0) 
-		//		{
-		//			//Encapsulated tile found -- switch its value to 1
-		//			m_tileGrid.at(currentTile.y).at(currentTile.x) = 1;
-		//			//Update its texture
-		//			SetTileTexCoords(currentTile);
-		//		}
-		//		break;
+			//Perform checks on the tile's surroundings to ensure it's of the correct type
+			switch (tile)
+			{
+			case 0: //Fog tile
+				//Fog tiles are always fog unless completely encapsulated by territory, in which case they become grass tiles
+				if (neighborTiles.size() != 4) break; //It's impossible for edge of map tiles to be completely encapsulated by territory
+				if (neighborTiles.at(0) != 0 && neighborTiles.at(1) != 0 && neighborTiles.at(2) != 0 && neighborTiles.at(3) != 0) 
+				{
+					//Encapsulated tile found -- switch its value to 1
+					m_tileGrid.at(currentTile.y).at(currentTile.x) = 1;
+					//Update its texture
+					SetTileTexCoords(currentTile);
+				}
+				break;
 
-		//	case 1: //Grass tile
-		//		//Grass tiles with any fog tile neighbors become marker tiles
-		//		for (int i = 0; i < neighborTiles.size(); i++)
-		//		{
-		//			if (neighborTiles.at(i) == 0) 
-		//			{
-		//				//New marker tile found, update it and its texture
-		//				m_tileGrid.at(currentTile.y).at(currentTile.x) = 2;
-		//				SetTileTexCoords(currentTile);
-		//				break;
-		//			}
-		//		}
-		//		//Grass tiles that are not connected to the nest by other grass tiles become fog tiles
-		//		break;
+			case 1: //Grass tile
+				//Grass tiles with any fog tile neighbors become marker tiles
+				std::cout << "checking grass tile " << currentTile.x << ", " << currentTile.y << ":\n";
 
-		//	case 2: //Marker tile
-		//		//Marker tiles completely encapsulated by territory become grass tiles
-		//		if (neighborTiles.size() != 4) break; //It's impossible for edge of map tiles to be completely encapsulated by territory
-		//		if (neighborTiles.at(0) != 0 && neighborTiles.at(1) != 0 && neighborTiles.at(2) != 0 && neighborTiles.at(3) != 0)
-		//		{
-		//			//Encapsulated tile found -- switch its value to 1
-		//			m_tileGrid.at(currentTile.y).at(currentTile.x) = 1;
-		//			//Update its texture
-		//			SetTileTexCoords(currentTile);
-		//		}
-		//		break;
+				for (int i = 0; i < neighborTiles.size(); i++)
+				{
+					std::cout << "neighbor " << i << ": " << neighborTiles.at(i) << "\n";
+					if (neighborTiles.at(i) == 0) 
+					{
+						//New marker tile found, update it and its texture
+						std::cout << "marker identified, breaking\n";
+						m_tileGrid.at(currentTile.y).at(currentTile.x) = 2;
+						SetTileTexCoords(currentTile);
+						break;
+					}
+				}
+				//Grass tiles that are not connected to the nest by other grass tiles become fog tiles
+				break;
 
-		//	default: //More tiles go here
-		//		break;
-		//	}
-		//}
+			case 2: //Marker tile
+				//Marker tiles completely encapsulated by territory become grass tiles
+				if (neighborTiles.size() != 4) break; //It's impossible for edge of map tiles to be completely encapsulated by territory
+				if (neighborTiles.at(0) != 0 && neighborTiles.at(1) != 0 && neighborTiles.at(2) != 0 && neighborTiles.at(3) != 0)
+				{
+					//Encapsulated tile found -- switch its value to 1
+					m_tileGrid.at(currentTile.y).at(currentTile.x) = 1;
+					//Update its texture
+					SetTileTexCoords(currentTile);
+				}
+				break;
+
+			default: //More tiles go here
+				break;
+			}
+		}
 	}
 }
 
@@ -188,18 +192,6 @@ void Map::PrepareTileMap(int const in_textureTileSize, int const in_numFogTextur
 	}
 }
 
-void Map::PrintMap() 
-{
-	for (int height = 0; height < m_tileGrid.size(); height++)
-	{
-		for (int width = 0; width < m_tileGrid.at(0).size(); width++)
-		{
-			if (width == m_tileGrid.at(0).size() - 1) std::cout << m_tileGrid.at(height).at(width) << "\n";
-			else std::cout << m_tileGrid.at(height).at(width) << " ";
-		}
-	}
-}
-
 //Set the position and texture coordinates for each triangle in the map's VertexArray
 void Map::GenerateMapVertexArray(int const in_textureTileSize)
 {
@@ -209,6 +201,7 @@ void Map::GenerateMapVertexArray(int const in_textureTileSize)
 	//Set up the VertexArray
 	m_mapVertices.setPrimitiveType(sf::PrimitiveType::Triangles);
 	m_mapVertices.resize(mapWidth * mapHeight * 6);
+	std::cout << "height: " << mapHeight << ", width: " << mapWidth << ", num tiles: " << mapHeight * mapWidth << "\n";
 
 	//Loop the map grid
 	for (int currentY = 0; currentY < mapHeight; ++currentY)
@@ -216,7 +209,7 @@ void Map::GenerateMapVertexArray(int const in_textureTileSize)
 		for (int currentX = 0; currentX < mapWidth; ++currentX)
 		{
 			//Get a pointer to the triangles' vertices of the current tile
-			sf::Vertex* triangles = &m_mapVertices[(currentX + currentY * mapHeight) * 6];
+			sf::Vertex* triangles = &m_mapVertices[(currentX + currentY * mapWidth) * 6];
 
 			//Set the positions of the corners making up the 2 triangles
 			triangles[0].position = sf::Vector2f(currentX * in_textureTileSize, currentY * in_textureTileSize);
@@ -261,7 +254,7 @@ void Map::SetTileTexCoords(sf::Vector2i in_tile)
 	}
 
 	//Get a pointer to the triangles' vertices of the current tile
-	sf::Vertex* triangles = &m_mapVertices[(in_tile.x + in_tile.y * m_tileGrid.size()) * 6];
+	sf::Vertex* triangles = &m_mapVertices[(in_tile.x + in_tile.y * m_tileGrid.at(0).size()) * 6];
 
 	triangles[0].texCoords = textureQuad[0];
 	triangles[1].texCoords = textureQuad[2];
@@ -269,4 +262,16 @@ void Map::SetTileTexCoords(sf::Vector2i in_tile)
 	triangles[3].texCoords = textureQuad[1];
 	triangles[4].texCoords = textureQuad[2];
 	triangles[5].texCoords = textureQuad[3];
+}
+
+void Map::PrintMap()
+{
+	for (int height = 0; height < m_tileGrid.size(); height++)
+	{
+		for (int width = 0; width < m_tileGrid.at(0).size(); width++)
+		{
+			if (width == m_tileGrid.at(0).size() - 1) std::cout << m_tileGrid.at(height).at(width) << "\n";
+			else std::cout << m_tileGrid.at(height).at(width) << " ";
+		}
+	}
 }

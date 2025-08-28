@@ -1,11 +1,12 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include "Scene.h"
 #include "Map.h";
 
 class GameScene : public Scene {
 private:
 	//InputHandler m_inputHandler;
-	Map m_map;
+	Map m_map = Map(200, 1, 3, 3);
 	
 	//std::map<int, GameObject> m_gameObjects;
 	//std::map<int, VisualComponent> m_visualComponents;

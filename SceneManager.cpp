@@ -12,6 +12,10 @@ SceneManager::SceneManager()
 	//Create the scenes used throughout the game
 	m_scenes["Menu"] = std::make_unique<MenuScene>();
 	m_scenes["Game"] = std::make_unique<GameScene>();
+
+	//Set the starting scene and pass it a reference to the AssetStore instance
+	m_currentScene = "Game"; //switch to menu
+	m_scenes[m_currentScene]->SetAssetStore(&m_assetStore);
 }
 
 //Should the singular SceneManager instance be destroyed, another one can now be created

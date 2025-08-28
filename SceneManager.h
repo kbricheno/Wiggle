@@ -10,7 +10,7 @@ private:
 	static bool m_isInstantiated;
 
 	std::map<std::string, std::unique_ptr<Scene>> m_scenes;
-	std::string m_currentScene = "Menu";
+	std::string m_currentScene;
 
 	AssetStore m_assetStore;
 

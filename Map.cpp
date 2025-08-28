@@ -22,7 +22,7 @@ Map::Map(int const in_textureTileSize, int const in_numFogTextures, int const in
 	m_centerTile = { (int)std::floor((m_tileGrid.at(0).size() - 1) / 2.f), (int)std::floor((m_tileGrid.size() - 1) / 2.f)};
 
 	//Offset the center tile by the size of the starting territory, then mark the starting territory tiles in the grid
-	sf::Vector2i centerTileOffset = { m_centerTile.x - (int)std::ceil((m_centerSize.x - 1) / 2.f), m_centerTile.y - (int)std::ceil((m_centerSize.y - 1) / 2.f) };
+	sf::Vector2i centerTileOffset = { m_centerTile.x - (int)std::floor((m_centerSize.x - 1) / 2.f), m_centerTile.y - (int)std::floor((m_centerSize.y - 1) / 2.f) };
 	for (int width = 0; width < m_centerSize.x; width++)
 	{
 		for (int height = 0; height < m_centerSize.y; height++)
@@ -32,7 +32,7 @@ Map::Map(int const in_textureTileSize, int const in_numFogTextures, int const in
 	}
 
 	PrepareTileTextures(in_textureTileSize, in_numFogTextures, in_numGrassTextures, in_numMarkedGrassTextures);
-	GenerateMapVertexArray(/*in_textureTileSize*/ 50);
+	GenerateMapVertexArray(in_textureTileSize);
 	UpdateTerritory();
 }
 

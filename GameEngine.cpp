@@ -8,9 +8,6 @@ GameEngine::GameEngine()
 {
 	assert(!m_isInstantiated);
 	m_isInstantiated = true;
-
-	//Create the game window
-	m_window.create(sf::VideoMode({ 1600, 900 }), "Wiggle", sf::Style::Default);
 }
 
 //Should the singular GameEngine instance be destroyed, another one can now be created

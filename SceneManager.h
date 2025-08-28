@@ -15,7 +15,7 @@ private:
 	AssetStore m_assetStore;
 
 public:
-	SceneManager();
+	SceneManager(sf::RenderWindow& in_window);
 	~SceneManager();
 
 	void SetScene(std::string in_sceneName) { m_currentScene = in_sceneName; };

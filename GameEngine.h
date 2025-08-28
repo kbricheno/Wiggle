@@ -8,9 +8,9 @@ private:
 
 	sf::Clock m_clock;
 	float m_deltaTime = 0;
-	sf::RenderWindow m_window;
+	sf::RenderWindow m_window = sf::RenderWindow(sf::VideoMode({1200, 800}), "Wiggle", sf::Style::Close, sf::State::Windowed);
 
-	SceneManager m_sceneManager;
+	SceneManager m_sceneManager = SceneManager(m_window);
 
 	void HandleInput();
 	void Update();

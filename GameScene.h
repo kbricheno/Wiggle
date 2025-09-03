@@ -2,10 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include "Scene.h"
 #include "Map.h";
+#include "GameInputHandler.h"
 
 class GameScene : public Scene {
 private:
-	//InputHandler m_inputHandler;
+	//Map
 	int const m_TILE_SIZE = 200;
 	Map m_map = Map(m_TILE_SIZE, 1, 3, 3);
 
@@ -23,7 +24,7 @@ private:
 	//std::map<int, AudioComponent> m_audioComponents;
 	//std::map<int, PhysicsComponent> m_physicsComponents;
 	//std::map<int, BehaviorComponent> m_behaviorComponents;
-	//std::map<int, InputComponent> m_inputComponents;
+	//std::map<int, SelectionComponent> m_selectionComponents;
 
 public:
 	GameScene(sf::Vector2u const in_windowSize);

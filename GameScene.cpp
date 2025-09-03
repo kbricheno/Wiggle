@@ -8,6 +8,8 @@ GameScene::GameScene(sf::Vector2u const in_windowSize)
 	m_gameView.setCenter(m_map.GetMapVertices().getBounds().size / 2.f);
 
 	//setup input handler
+	
+
 	//setup map
 	m_map.PrintMap(); //ensure the map was generated correctly
 	//spawn gameobjects & components

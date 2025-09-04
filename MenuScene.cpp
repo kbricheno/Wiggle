@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-MenuScene::MenuScene()
+MenuScene::MenuScene(AssetStore* in_assets, SceneManager* in_sceneManager) : Scene(in_assets, in_sceneManager)
 {
 	//setup input handler
 	//spawn gameobjects & components

@@ -9,13 +9,12 @@ SceneManager::SceneManager(sf::RenderWindow& in_window)
 	assert(!m_isInstantiated);
 	m_isInstantiated = true;
 
-	//Create the scenes used throughout the game
-	m_scenes["Menu"] = std::make_unique<MenuScene>();
-	m_scenes["Game"] = std::make_unique<GameScene>(GameScene(in_window.getSize()));
+	//Create the scenes used throughout the game, pass them pointers to the AssetStore and SceneManager instances
+	m_scenes["Menu"] = std::make_unique<MenuScene>(MenuScene(&m_assetStore, this));
+	m_scenes["Game"] = std::make_unique<GameScene>(GameScene(&m_assetStore, this, in_window.getSize()));
 
-	//Set the starting scene and pass it a reference to the AssetStore instance
+	//Set the starting scene
 	m_currentScene = "Game"; //switch to menu
-	m_scenes[m_currentScene]->SetAssetStore(&m_assetStore);
 }
 
 //Should the singular SceneManager instance be destroyed, another one can now be created

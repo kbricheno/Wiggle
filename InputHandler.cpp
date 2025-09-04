@@ -1,6 +1,7 @@
 #include "InputHandler.h"
+#include <iostream>
 
-void InputHandler::HandleInput(sf::RenderWindow& in_window, std::vector<sf::View*> const in_views)
+void InputHandler::HandleInput(sf::RenderWindow& in_window, std::map<int,SelectionComponent>& in_sComps)
 {
 	while (const std::optional event = in_window.pollEvent()) 
 	{
@@ -33,20 +34,25 @@ void InputHandler::HandleInput(sf::RenderWindow& in_window, std::vector<sf::View
 		{
 			if (mouseButton->button == sf::Mouse::Button::Left) 
 			{
-				//Check the buttons for each view; views should be passed in in priority order, i.e. UI button click > in-game element click
-				for (size_t currentView = in_views.size(); currentView > 0; currentView--)
+				for (size_t currentView = m_views.size(); currentView > 0; currentView--)
 				{
-					sf::Vector2f mousePos = in_window.mapPixelToCoords(sf::Mouse::getPosition(), *in_views.at(currentView));
+					sf::Vector2f mousePos = in_window.mapPixelToCoords(sf::Mouse::getPosition(), m_views.at(currentView));
 					
-					for (size_t i = 0; i < m_sComps.size(); i++)
+					for (auto& [id, sComp] : in_sComps)
 					{
-						if (m_sComps.at(i)->GetBounds().contains(mousePos)) 
+						if (sComp.GetBounds().contains(mousePos))
 						{
-							HandleButtonClickedOn(in_window, m_sComps.at(i));
+							HandleButtonClickedOn(in_window, sComp);
 						}
 					}
 				}
 			}
+		}
+
+		else if (sf::Event::MouseWheelScrolled const *wheel = event->getIf<sf::Event::MouseWheelScrolled>()) 
+		{
+			std::cout << wheel->delta << "\n";
+			HandleMouseScrolled(in_window, wheel->delta > 0 ? true : false);
 		}
 	}
 }

@@ -13,7 +13,7 @@ private:
 	//std::map<int, InputComponent> m_inputComponents;
 
 public:
-	MenuScene();
+	MenuScene(AssetStore* in_assets, SceneManager* in_sceneManager);
 
 	void HandleInput(sf::RenderWindow& in_window) override;
 	void Update(float const in_deltaTime) override;

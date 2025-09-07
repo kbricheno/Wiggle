@@ -1,7 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <random>
-#include <iostream>
+#include <SFML/Graphics/VertexArray.hpp>
+#include <SFML/System/Vector2.hpp>
 
 class Map {
 private:

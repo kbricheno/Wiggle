@@ -1,4 +1,6 @@
 #include "SceneManager.h"
+#include "MenuScene.h"
+#include "GameScene.h"
 
 //Define the static bool that allows only one instance of SceneManager to exist
 bool SceneManager::m_isInstantiated = false;
@@ -10,17 +12,23 @@ SceneManager::SceneManager(sf::RenderWindow& in_window)
 	m_isInstantiated = true;
 
 	//Create the scenes used throughout the game, pass them pointers to the AssetStore and SceneManager instances
-	m_scenes["Menu"] = std::make_unique<MenuScene>(MenuScene(&m_assetStore, this));
-	m_scenes["Game"] = std::make_unique<GameScene>(GameScene(&m_assetStore, this, in_window.getSize()));
+	m_scenes["Menu"] = std::make_unique<MenuScene>();
+	m_scenes["Game"] = std::make_unique<GameScene>(in_window.getSize());
 
 	//Set the starting scene
-	m_currentScene = "Game"; //switch to menu
+	SetScene("Game"); //switch to menu
 }
 
 //Should the singular SceneManager instance be destroyed, another one can now be created
 SceneManager::~SceneManager()
 {
 	m_isInstantiated = false;
+}
+
+void SceneManager::SetScene(std::string const& in_sceneName) 
+{
+	m_currentScene = in_sceneName;
+	m_scenes.at(m_currentScene)->Initialize(&m_assetStore, this);
 }
 
 void SceneManager::HandleInput(sf::RenderWindow& in_window) 

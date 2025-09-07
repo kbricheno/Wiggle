@@ -1,5 +1,6 @@
 #pragma once
-#include <SFML/System.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include "SceneManager.h"
 
 class GameEngine {

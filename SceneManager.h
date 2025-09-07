@@ -1,9 +1,9 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <map>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include "AssetStore.h"
-#include "GameScene.h"
-#include "MenuScene.h"
+
+class Scene;
 
 class SceneManager {
 private:
@@ -18,8 +18,7 @@ public:
 	SceneManager(sf::RenderWindow& in_window);
 	~SceneManager();
 
-	void SetScene(std::string in_sceneName) { m_currentScene = in_sceneName; };
-	std::string const GetScene() { return m_currentScene; };
+	void SetScene(std::string const& in_sceneName);
 
 	void HandleInput(sf::RenderWindow& in_window);
 	void Update(float const in_deltaTime);

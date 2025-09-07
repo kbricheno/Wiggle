@@ -8,6 +8,8 @@ GameEngine::GameEngine()
 {
 	assert(!m_isInstantiated);
 	m_isInstantiated = true;
+
+	m_window.setKeyRepeatEnabled(false); //turn off key repeat to prevent multiple key press events being triggered by holding a key down
 }
 
 //Should the singular GameEngine instance be destroyed, another one can now be created
@@ -21,24 +23,6 @@ void GameEngine::Run()
 	//run the game while the window is open
 	while (m_window.isOpen()) 
 	{
-		//temporarily handle input here just to close the window
-		while (const std::optional event = m_window.pollEvent())
-		{
-			//closing window
-			if (event->is<sf::Event::Closed>())
-			{
-				m_window.close();
-			}
-
-			//key press events
-			else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
-			{
-				if (keyPressed->scancode == sf::Keyboard::Scancode::Escape) {
-					m_window.close();
-				}
-			}
-		}
-
 		m_deltaTime = m_clock.restart().asSeconds();
 
 		HandleInput();

@@ -1,5 +1,9 @@
 #pragma once
+#include <SFML/Graphics/RenderWindow.hpp>
 #include "Scene.h"
+
+class AssetStore;
+class SceneManager;
 
 class MenuScene : public Scene {
 private:
@@ -13,8 +17,9 @@ private:
 	//std::map<int, InputComponent> m_inputComponents;
 
 public:
-	MenuScene(AssetStore* in_assets, SceneManager* in_sceneManager);
+	MenuScene();
 
+	void Initialize(AssetStore* in_assets, SceneManager* in_sceneManager) override;
 	void HandleInput(sf::RenderWindow& in_window) override;
 	void Update(float const in_deltaTime) override;
 	void Draw(sf::RenderWindow& in_window) override;

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Map.h"
 
 //Generate a grid of integers representing tiles, where 0 = fog of war, 1 = territory, and 2 = territory boundary

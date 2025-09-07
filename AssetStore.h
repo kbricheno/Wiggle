@@ -1,7 +1,7 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include <map>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
 class AssetStore {
 private:
@@ -14,9 +14,9 @@ public:
 	AssetStore();
 	~AssetStore();
 
-	sf::Texture& const GetBitmap(std::string const& entityName);
+	sf::Texture const& GetBitmap(std::string const& entityName);
 	void AddBitmap(std::string const& entityName);
 
-	sf::SoundBuffer& const GetSoundBuffer(std::string const& soundName);
+	sf::SoundBuffer const& GetSoundBuffer(std::string const& soundName);
 	void AddSoundBuffer(std::string const& soundName);
 };

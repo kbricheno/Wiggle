@@ -1,12 +1,20 @@
 #pragma once
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include "InputHandler.h"
+#include "SelectionComponent.h"
 
 class GameInputHandler : public InputHandler {
 private:
+	void HandleKeyPressed(sf::RenderWindow& in_window, sf::Keyboard::Scancode const in_key) override;
+	void HandleKeyReleased(sf::RenderWindow& in_window, sf::Keyboard::Scancode const in_key) override;
+	void HandleMouseButtonDown(sf::RenderWindow& in_window, sf::Mouse::Button const in_mouseButton) override;
 	void HandleButtonClickedOn(sf::RenderWindow& in_window, SelectionComponent in_sCompClicked) override;
 	void HandleMouseScrolled(sf::RenderWindow& in_window, bool in_isScrollingUp) override;
+	void HandleMousePosition(sf::RenderWindow& in_window, sf::Vector2i in_mousePosInWindow) override;
 
 public:
-	GameInputHandler() : InputHandler(nullptr, nullptr, {sf::View()}) {}
-	GameInputHandler(Scene* in_scene, SceneManager* in_sceneManager, std::vector<sf::View> in_views) : InputHandler(in_scene, in_sceneManager, in_views) {}
+	GameInputHandler() {}
 };

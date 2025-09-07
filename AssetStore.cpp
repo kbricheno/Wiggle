@@ -19,7 +19,7 @@ AssetStore::~AssetStore()
 	m_isInstantiated = false;
 }
 
-sf::Texture& const AssetStore::GetBitmap(std::string const& entityName) 
+sf::Texture const& AssetStore::GetBitmap(std::string const& entityName) 
 {
 	return m_bitmaps.at(entityName);
 }
@@ -38,7 +38,7 @@ void AssetStore::AddBitmap(std::string const& entityName)
 	m_bitmaps[entityName] = sf::Texture("Assets/" + entityName + ".png");
 }
 
-sf::SoundBuffer& const AssetStore::GetSoundBuffer(std::string const& soundName) 
+sf::SoundBuffer const& AssetStore::GetSoundBuffer(std::string const& soundName) 
 {
 	return m_soundBuffers.begin()->second;
 }

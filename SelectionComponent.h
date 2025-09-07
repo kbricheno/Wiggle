@@ -1,6 +1,8 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include "Component.h"
+
+class GameObject;
 
 class SelectionComponent : public Component {
 private:

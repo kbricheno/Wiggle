@@ -1,12 +1,17 @@
+#include <iostream>
 #include "MenuScene.h"
 
-#include <iostream>
-
-
-MenuScene::MenuScene(AssetStore* in_assets, SceneManager* in_sceneManager) : Scene(in_assets, in_sceneManager)
+MenuScene::MenuScene()
 {
-	//setup input handler
-	//spawn gameobjects & components
+	//Create input handler
+	//Create gameobjects & components
+}
+
+void MenuScene::Initialize(AssetStore* in_assets, SceneManager* in_sceneManager)
+{
+	Scene::Initialize(in_assets, in_sceneManager);
+
+	//Initialize menu-specific input handler
 }
 
 void MenuScene::HandleInput(sf::RenderWindow& in_window)

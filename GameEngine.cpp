@@ -38,7 +38,7 @@ void GameEngine::HandleInput()
 
 void GameEngine::Update()
 {
-	m_sceneManager.Update(m_deltaTime);
+	m_sceneManager.Update(m_window, m_deltaTime);
 }
 
 void GameEngine::Draw()

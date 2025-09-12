@@ -133,27 +133,27 @@
   <ItemGroup>
     <ClCompile Include="AssetStore.cpp" />
     <ClCompile Include="GameEngine.cpp" />
-    <ClCompile Include="GameInputHandler.cpp" />
-    <ClCompile Include="GameScene.cpp" />
-    <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="InputHandlers\GameInputHandler.cpp" />
+    <ClCompile Include="InputHandlers\InputHandler.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MenuScene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Scenes\GameScene.cpp" />
+    <ClCompile Include="Scenes\MenuScene.cpp" />
+    <ClCompile Include="Scenes\SceneManager.cpp" />
     <ClCompile Include="Wiggle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetStore.h" />
-    <ClInclude Include="Component.h" />
+    <ClInclude Include="Components\Component.h" />
+    <ClInclude Include="Components\GameObject.h" />
+    <ClInclude Include="Components\SelectionComponent.h" />
     <ClInclude Include="GameEngine.h" />
-    <ClInclude Include="GameInputHandler.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameScene.h" />
-    <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="InputHandlers\GameInputHandler.h" />
+    <ClInclude Include="InputHandlers\InputHandler.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="MenuScene.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="SelectionComponent.h" />
+    <ClInclude Include="Scenes\GameScene.h" />
+    <ClInclude Include="Scenes\MenuScene.h" />
+    <ClInclude Include="Scenes\Scene.h" />
+    <ClInclude Include="Scenes\SceneManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

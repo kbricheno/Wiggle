@@ -16,4 +16,9 @@ public:
 	void Update(GameObject& in_obj) override {};
 
 	sf::FloatRect GetBounds() const { return m_selectionBounds; }
+
+	bool IsHovered() const { return m_isHovered; }
+	bool IsSelected() const { return m_isSelected; }
+	void SetHovered(bool in_hovered) { m_isHovered = in_hovered; }
+	void ToggleSelected() { m_isSelected = !m_isSelected; }
 };

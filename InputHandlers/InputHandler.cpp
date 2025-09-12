@@ -1,4 +1,5 @@
 #include "InputHandler.h"
+#include <iostream>
 
 void InputHandler::Initialize(Scene* const in_scene, SceneManager* const in_sceneManager, sf::View* const in_view) 
 {
@@ -40,12 +41,16 @@ void InputHandler::HandleInput(sf::RenderWindow& in_window, std::map<int,Selecti
 		{
 			if (mouseButton->button == sf::Mouse::Button::Left) 
 			{
-				sf::Vector2f mousePos = in_window.mapPixelToCoords(sf::Mouse::getPosition(), *m_view);
+				sf::Vector2f mousePos = in_window.mapPixelToCoords(sf::Mouse::getPosition(in_window), *m_view);
 					
 				for (auto& [id, sComp] : in_sComps)
 				{
 					if (sComp.GetBounds().contains(mousePos))
 					{
+						//Inform the SelectionComponent it was selected/deselected
+						sComp.ToggleSelected();
+
+						//Pass the information along in case of scene-specific behavior not handled by the SelectionComponent itself (e.g. clicking a menu button)
 						HandleButtonClickedOn(in_window, sComp);
 					}
 				}
@@ -55,11 +60,22 @@ void InputHandler::HandleInput(sf::RenderWindow& in_window, std::map<int,Selecti
 		//Handle scroll wheel -- zooms the map in the GameScene
 		else if (sf::Event::MouseWheelScrolled const *wheel = event->getIf<sf::Event::MouseWheelScrolled>()) 
 		{
-			HandleMouseScrolled(in_window, wheel->delta > 0 ? true : false);
+			HandleMouseScrolled(wheel->delta);
 		}
 	}
 
 	//Always handle mouse position, even if the mouse has not moved (thus outside the event queue)
 	//Handle mouse position -- potential to pan the map in the GameScene
-	HandleMousePosition(in_window, sf::Mouse::getPosition(in_window));
+	HandleMousePosition(sf::Mouse::getPosition(in_window));
+
+	//Update each SelectionComponent's hovered bool
+	std::string s = "";
+	for (auto& [id, sComp] : in_sComps)
+	{
+		sComp.SetHovered(false);
+		if (sComp.GetBounds().contains(in_window.mapPixelToCoords(sf::Mouse::getPosition(in_window), *m_view)))
+		{
+			sComp.SetHovered(true);
+		}
+	}
 }

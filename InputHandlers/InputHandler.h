@@ -4,7 +4,7 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
-#include "SelectionComponent.h"
+#include "../Components/SelectionComponent.h"
 
 class Scene;
 class SceneManager;
@@ -22,9 +22,9 @@ protected:
 	virtual void HandleKeyPressed(sf::RenderWindow& in_window, sf::Keyboard::Scancode const in_key) {};
 	virtual void HandleKeyReleased(sf::RenderWindow& in_window, sf::Keyboard::Scancode const in_key) {};
 	virtual void HandleMouseButtonDown(sf::RenderWindow& in_window, sf::Mouse::Button const in_mouseButton) {};
-	virtual void HandleButtonClickedOn(sf::RenderWindow& in_window, SelectionComponent in_sCompClicked) {};
-	virtual void HandleMouseScrolled(sf::RenderWindow& in_window, bool in_isScrollingUp) {};
-	virtual void HandleMousePosition(sf::RenderWindow& in_window, sf::Vector2i in_mousePosInWindow) {};
+	virtual void HandleButtonClickedOn(sf::RenderWindow& in_window, SelectionComponent& in_sCompClicked) {};
+	virtual void HandleMouseScrolled(float in_wheelDelta) {};
+	virtual void HandleMousePosition(sf::Vector2i in_mousePosInWindow) {};
 
 public:
 	InputHandler() {};

@@ -20,7 +20,7 @@ void MenuScene::HandleInput(sf::RenderWindow& in_window)
 	std::cout << "menu input\n";
 }
 
-void MenuScene::Update(float const in_deltaTime)
+void MenuScene::Update(sf::RenderWindow& in_window, float const in_deltaTime)
 {
 	//behaviourcomponents.Update(in_deltaTime);
 	//physicscomponents.Update(in_deltaTime);

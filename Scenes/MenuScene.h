@@ -21,6 +21,6 @@ public:
 
 	void Initialize(AssetStore* in_assets, SceneManager* in_sceneManager) override;
 	void HandleInput(sf::RenderWindow& in_window) override;
-	void Update(float const in_deltaTime) override;
+	void Update(sf::RenderWindow& in_window, float const in_deltaTime) override;
 	void Draw(sf::RenderWindow& in_window) override;
 };

@@ -27,16 +27,14 @@ private:
 	//View-related attributes allowing the user to pan the view around and zoom in/out
 	sf::View m_gameView;
 
-	int m_mouseWheelDelta = 0;
 	float m_currentViewZoom = 10.f;
 	float const m_VIEW_SCROLL_INCREMENT = 50.f;
 	sf::Vector2f const m_VIEW_SCROLL_BOUNDS = { 5.f, 30.f };
-	void PanView(sf::RenderWindow const& in_window, float const in_deltaTime);
+	void PanView(sf::RenderWindow const& in_window, float const in_deltaTime, sf::Vector2i const in_mousePosInWindow);
 
-	sf::Vector2i m_mousePosInWindow;
 	int const m_VIEW_MOVE_BOUNDS = 75;
 	float const m_VIEW_MOVE_SPEED = 750.f;
-	void ZoomView(sf::RenderWindow const& in_window, float const in_deltaTime);
+	void ZoomView(sf::RenderWindow const& in_window, float const in_deltaTime, float const in_wheelDelta);
 
 	
 
@@ -56,8 +54,4 @@ public:
 	void HandleInput(sf::RenderWindow& in_window) override;
 	void Update(sf::RenderWindow& in_window, float const in_deltaTime) override;
 	void Draw(sf::RenderWindow& in_window) override;
-
-	//Methods called by the InputHandler instance to update the GameScene about mouse position and scroll wheel inputs
-	void SetMouseScroll(int in_mouseWheelDelta) { m_mouseWheelDelta = in_mouseWheelDelta; }
-	void SetMousePos(sf::Vector2i in_mousePosInWindow) { m_mousePosInWindow = in_mousePosInWindow; }
 };

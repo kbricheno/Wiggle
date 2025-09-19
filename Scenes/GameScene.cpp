@@ -20,7 +20,7 @@ GameScene::GameScene(sf::RenderWindow const& in_window)
 
 		currentId++;
 	}
-		
+	
 	//Set up view size and position (size = (arbitrary value * tile size) as a ratio of the size of the window)
 	m_gameView.setSize({ (float)m_TILE_SIZE * m_currentViewZoom, in_window.getSize().y * (m_TILE_SIZE * m_currentViewZoom / (float)in_window.getSize().x)});
 	m_gameView.setCenter(m_map.GetMapVertices().getBounds().size / 2.f);
@@ -46,10 +46,9 @@ void GameScene::Update(sf::RenderWindow& in_window, float const in_deltaTime)
 	//physicscomponents.Update(in_deltaTime);
 	//audiocomponents.Update(in_deltaTime);
 
-	//Update the View's position and size based on input received
-	PanView(in_window, in_deltaTime);
-	ZoomView(in_window, in_deltaTime);
-	m_mouseWheelDelta = 0; //Reset the delta each frame to prevent scrolling when no input is given
+	//Update the View's position and size based on input from the handler
+	PanView(in_window, in_deltaTime, m_inputHandler.GetMousePosition());
+	ZoomView(in_window, in_deltaTime, m_inputHandler.GetWheelDelta());
 }
 
 void GameScene::Draw(sf::RenderWindow& in_window)
@@ -87,11 +86,11 @@ void GameScene::Draw(sf::RenderWindow& in_window)
 #pragma region View
 
 //Zoom the view
-void GameScene::ZoomView(sf::RenderWindow const& in_window, float const in_deltaTime)
+void GameScene::ZoomView(sf::RenderWindow const& in_window, float const in_deltaTime, float const in_wheelDelta)
 {
 	//When mouse wheel is scrolled, alter the view scroll
-	if (m_mouseWheelDelta < 0) m_currentViewZoom += m_VIEW_SCROLL_INCREMENT * in_deltaTime;
-	else if (m_mouseWheelDelta > 0) m_currentViewZoom -= m_VIEW_SCROLL_INCREMENT * in_deltaTime;
+	if (in_wheelDelta < 0) m_currentViewZoom += m_VIEW_SCROLL_INCREMENT * in_deltaTime;
+	else if (in_wheelDelta > 0) m_currentViewZoom -= m_VIEW_SCROLL_INCREMENT * in_deltaTime;
 
 	//Clamp the view size to its minimum and maximum bounds
 	m_currentViewZoom = std::clamp(m_currentViewZoom, m_VIEW_SCROLL_BOUNDS.x, m_VIEW_SCROLL_BOUNDS.y);
@@ -101,20 +100,20 @@ void GameScene::ZoomView(sf::RenderWindow const& in_window, float const in_delta
 }
 
 //Move the view
-void GameScene::PanView(sf::RenderWindow const& in_window, float const in_deltaTime) 
+void GameScene::PanView(sf::RenderWindow const& in_window, float const in_deltaTime, sf::Vector2i const in_mousePosInWindow) 
 {
 	//Only move and/or zoom the view if the mouse is within the window
-	if (in_window.getViewport(m_gameView).contains(m_mousePosInWindow))
+	if (in_window.getViewport(m_gameView).contains(in_mousePosInWindow))
 	{
 		//Set a direction vector for moving the view and obtain the view's current position
 		sf::Vector2f moveDir = { 0,0 };
 		sf::Vector2f centerPos = m_gameView.getCenter();
 
 		//If the mouse is within a short distance of one or more sides of the screen, update the direction vector
-		if (m_mousePosInWindow.x > (int)in_window.getSize().x - m_VIEW_MOVE_BOUNDS) moveDir.x += 1;
-		if (m_mousePosInWindow.y > (int)in_window.getSize().y - m_VIEW_MOVE_BOUNDS) moveDir.y += 1;
-		if (m_mousePosInWindow.x < m_VIEW_MOVE_BOUNDS) moveDir.x -= 1;
-		if (m_mousePosInWindow.y < m_VIEW_MOVE_BOUNDS) moveDir.y -= 1;
+		if (in_mousePosInWindow.x > (int)in_window.getSize().x - m_VIEW_MOVE_BOUNDS) moveDir.x += 1;
+		if (in_mousePosInWindow.y > (int)in_window.getSize().y - m_VIEW_MOVE_BOUNDS) moveDir.y += 1;
+		if (in_mousePosInWindow.x < m_VIEW_MOVE_BOUNDS) moveDir.x -= 1;
+		if (in_mousePosInWindow.y < m_VIEW_MOVE_BOUNDS) moveDir.y -= 1;
 
 		//Normalize the direction vector, multiply it by the view's move speed, then add it to the view's position
 		if (moveDir != sf::Vector2f({ 0,0 })) centerPos += moveDir.normalized() * m_VIEW_MOVE_SPEED * in_deltaTime;

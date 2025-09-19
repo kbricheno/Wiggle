@@ -11,9 +11,9 @@ private:
 	bool m_isHovered = false;
 
 public:
-	SelectionComponent(sf::FloatRect in_selectionBounds) : m_selectionBounds(in_selectionBounds) {};
+	SelectionComponent(sf::FloatRect in_selectionBounds) : m_selectionBounds(in_selectionBounds) {}
 
-	void Update(GameObject& in_obj) override {};
+	void Update(GameObject& in_obj) override {}
 
 	sf::FloatRect GetBounds() const { return m_selectionBounds; }
 

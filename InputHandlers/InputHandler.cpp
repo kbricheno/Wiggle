@@ -10,6 +10,24 @@ void InputHandler::Initialize(Scene* const in_scene, SceneManager* const in_scen
 
 void InputHandler::HandleInput(sf::RenderWindow& in_window, std::map<int,SelectionComponent>& in_sComps)
 {
+	//Always store mouse position, even if the mouse has not moved (thus outside the event queue)
+	//Store the mouse position value which can be read by other classes
+	SetMousePosition(sf::Mouse::getPosition(in_window));
+
+	//Reset the mouse's wheel value to 0
+	SetMouseScrolled(0.f);
+
+	//Update each SelectionComponent's hovered bool
+	for (auto& [id, sComp] : in_sComps)
+	{
+		sComp.SetHovered(false);
+		if (sComp.GetBounds().contains(in_window.mapPixelToCoords(sf::Mouse::getPosition(in_window), *m_view)))
+		{
+			sComp.SetHovered(true);
+		}
+	}
+
+	//Loop the event queue and handle any input
 	while (const std::optional event = in_window.pollEvent()) 
 	{
 		//Closing window
@@ -36,12 +54,12 @@ void InputHandler::HandleInput(sf::RenderWindow& in_window, std::map<int,Selecti
 			HandleMouseButtonDown(in_window, mouseButton->button);
 		}
 
-		//Handling mouse releases -- clicking on buttons
+		//Handling mouse releases -- clicking on SelectionComponents 
 		else if (auto const* mouseButton = event->getIf<sf::Event::MouseButtonReleased>())
 		{
 			if (mouseButton->button == sf::Mouse::Button::Left) 
 			{
-				sf::Vector2f mousePos = in_window.mapPixelToCoords(sf::Mouse::getPosition(in_window), *m_view);
+				sf::Vector2f mousePos = in_window.mapPixelToCoords(GetMousePosition(), *m_view);
 					
 				for (auto& [id, sComp] : in_sComps)
 				{
@@ -50,32 +68,17 @@ void InputHandler::HandleInput(sf::RenderWindow& in_window, std::map<int,Selecti
 						//Inform the SelectionComponent it was selected/deselected
 						sComp.ToggleSelected();
 
-						//Pass the information along in case of scene-specific behavior not handled by the SelectionComponent itself (e.g. clicking a menu button)
+						//Pass the information along in case of scene-specific behavior not handled by the SelectionComponent itself
 						HandleButtonClickedOn(in_window, sComp);
 					}
 				}
 			}
 		}
 
-		//Handle scroll wheel -- zooms the map in the GameScene
+		//Store the scroll wheel value which can be read by other classes
 		else if (sf::Event::MouseWheelScrolled const *wheel = event->getIf<sf::Event::MouseWheelScrolled>()) 
 		{
-			HandleMouseScrolled(wheel->delta);
-		}
-	}
-
-	//Always handle mouse position, even if the mouse has not moved (thus outside the event queue)
-	//Handle mouse position -- potential to pan the map in the GameScene
-	HandleMousePosition(sf::Mouse::getPosition(in_window));
-
-	//Update each SelectionComponent's hovered bool
-	std::string s = "";
-	for (auto& [id, sComp] : in_sComps)
-	{
-		sComp.SetHovered(false);
-		if (sComp.GetBounds().contains(in_window.mapPixelToCoords(sf::Mouse::getPosition(in_window), *m_view)))
-		{
-			sComp.SetHovered(true);
+			SetMouseScrolled(wheel->delta);
 		}
 	}
 }
